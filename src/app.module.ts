@@ -18,6 +18,7 @@ import { CartModule } from './cart/cart.module';
 import { OrdersModule } from './orders/orders.module';
 import { ProfileModule } from './profile/profile.module';
 import { UploadModule } from './upload/upload.module';
+import { BannersModule } from './banners/banners.module';
 import { AdminModule } from './admin/admin.module';
 
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
@@ -37,6 +38,7 @@ import { Cart } from './cart/entities/cart.entity';
 import { CartItem } from './cart/entities/cart-item.entity';
 import { Order } from './orders/entities/order.entity';
 import { OrderItem } from './orders/entities/order-item.entity';
+import { Banner } from './banners/entities/banner.entity';
 
 import { UsersService } from './users/users.service';
 import databaseConfig from './config/database.config';
@@ -45,7 +47,7 @@ import uploadConfig from './config/upload.config';
 
 const ALL_ENTITIES = [
   User, Address, Category, Product, ProductImage, Review,
-  Favorite, Cart, CartItem, Order, OrderItem,
+  Favorite, Cart, CartItem, Order, OrderItem, Banner,
 ];
 
 @Module({
@@ -58,7 +60,7 @@ const ALL_ENTITIES = [
         DATABASE_HOST: Joi.string().required(),
         DATABASE_PORT: Joi.number().default(5432),
         DATABASE_USER: Joi.string().required(),
-        DATABASE_PASSWORD: Joi.string().required(),
+        DATABASE_PASSWORD: Joi.string().allow('').default(''),
         DATABASE_NAME: Joi.string().required(),
         JWT_ACCESS_SECRET: Joi.string().required(),
         JWT_REFRESH_SECRET: Joi.string().required(),
@@ -94,6 +96,7 @@ const ALL_ENTITIES = [
     OrdersModule,
     ProfileModule,
     UploadModule,
+    BannersModule,
     AdminModule,
   ],
   providers: [

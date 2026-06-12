@@ -3,6 +3,8 @@ import {
   ParseUUIDPipe, UseGuards, HttpCode, HttpStatus,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { BannersService } from '../banners/banners.service';
+import { CreateBannerDto, UpdateBannerDto } from '../banners/dto/banner.dto';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
@@ -34,6 +36,7 @@ export class AdminController {
     private readonly categoriesService: CategoriesService,
     private readonly ordersService: OrdersService,
     private readonly usersService: UsersService,
+    private readonly bannersService: BannersService,
   ) {}
 
   // ─── Categories ─────────────────────────────────────────────────────────────
@@ -156,5 +159,35 @@ export class AdminController {
   @ApiOperation({ summary: 'Delete user (Admin)' })
   deleteUser(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.remove(id);
+  }
+
+  // ─── Banners ─────────────────────────────────────────────────────────────────
+
+  @Get('banners')
+  @ApiOperation({ summary: 'List all banners (Admin)' })
+  findAllBanners() {
+    return this.bannersService.findAllAdmin();
+  }
+
+  @Post('banners')
+  @ApiOperation({ summary: 'Create banner (Admin)' })
+  createBanner(@Body() dto: CreateBannerDto) {
+    return this.bannersService.create(dto);
+  }
+
+  @Patch('banners/:id')
+  @ApiOperation({ summary: 'Update banner (Admin)' })
+  updateBanner(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateBannerDto,
+  ) {
+    return this.bannersService.update(id, dto);
+  }
+
+  @Delete('banners/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Delete banner (Admin)' })
+  deleteBanner(@Param('id', ParseUUIDPipe) id: string) {
+    return this.bannersService.remove(id);
   }
 }
